@@ -260,9 +260,17 @@
 (defun cocaine-misc-info ()
   "Show information about misc info."
   (when cocaine-show-misc-info
-    (let ((misc-info (format-mode-line mode-line-misc-info)))
-      (unless (string-blank-p misc-info)
-        (string-trim misc-info)))))
+    (let ((global-mode-string (mapcar (lambda (item) (cond ((and (listp item) (eq (car item) :eval))
+                                                            `(:eval
+                                                              (cocaine-add-separator
+                                                               :str ,(cadr item)
+                                                               :leftside nil)))
+                                                      ((not (string-empty-p item))
+                                                       `(:eval (cocaine-add-separator
+                                                                :str ,item :leftside
+                                                                nil) )) (t item)))
+                                      global-mode-string)))
+      (let ((misc-info (format-mode-line mode-line-misc-info))) (unless (string-blank-p misc-info) (string-trim misc-info))))))
 
 (defun cocaine-vc--rev (file backend)
   "Get the revision for FILE in BACKEND."
@@ -411,6 +419,8 @@
     left-section))
 (defun cocaine-right-section ()
   "Create the right section of the modeline."
+
+
   (let ((right-section (concat
                         (if (derived-mode-p 'pdf-view-mode)
                            (propertize
@@ -418,13 +428,12 @@
                         ;; (cocaine-add-separator :str (doom-modeline-segment--salih/word-count) :leftside t)
                         (cocaine-add-separator :str (doom-modeline-segment--salih/selection-info) :leftside t)
                         (cocaine-add-separator :str (doom-modeline-segment--matches) :leftside t)
-                        (cocaine-add-separator :str (and (boundp 'mu4e-alert-mode-line) (or mu4e-alert-mode-line ""))  :leftside t)
                         (cocaine-add-separator :str (doom-modeline-segment--lsp) :leftside t)
                         (cocaine-add-separator :str (doom-modeline-segment--minor-modes) :leftside t)
                         (cocaine-add-separator :str (cocaine-flycheck-mode-line) :leftside t)
-                        (cocaine-add-separator :str (doom-modeline-segment--vcs) :leftside t)
-                        (cocaine-time)
-                        (cocaine-add-separator :str awqat-mode-line-string :leftside nil))))
+                        (doom-modeline-segment--vcs)
+                        (cocaine-misc-info))))
+
 
 
     (list (propertize " " 'display `((space :align-to (- right ,(string-width right-section)))))
