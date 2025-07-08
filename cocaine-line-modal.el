@@ -2,7 +2,7 @@
 
 ;; Author: Mikael Konradsson
 ;; Version: 1.0
-;; Package-Requires: ((emacs "25.1") (nerd-icons "1.0") (cocaine-line-colors "1.0"))
+;; Package-Requires: ((emacs "25.1") (nerd-icons "1.0"))
 
 ;;; Commentary:
 ;; This package provides mode-line customization with optional support for Evil and Meow modes.

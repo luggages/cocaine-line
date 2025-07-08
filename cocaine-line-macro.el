@@ -9,7 +9,6 @@
 ;; configurable colors, and the ability to customize displayed information.
 
 ;;; Code:
-(require 'cocaine-line-colors)
 
 (defvar cocaine-macro-recording-symbol "●"
   "Symbol to indicate macro recording is in progress.")

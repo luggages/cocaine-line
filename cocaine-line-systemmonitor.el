@@ -11,7 +11,6 @@
 ;;; Code:
 
 (require 'nerd-icons)
-(require 'cocaine-line-colors)
 
 (defcustom cocaine-show-system-monitor nil
   "Whether to show system monitor information in the mode-line."
