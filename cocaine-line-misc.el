@@ -10,7 +10,6 @@
 ;;; Code:
 
 (require 'nerd-icons)
-(require 'cocaine-line-colors)
 (require 'project)
 
 (when (featurep 'projectile)
@@ -218,7 +217,7 @@
 
 (defun cocaine-copilot-info ()
   "HUD for Copilot."
-  (when (bound-and-true-p copilot-mode)
+  (when (and cocaine-show-copilot-info (bound-and-true-p copilot-mode))
     (propertize " " 'face '(:inherit success))))
 
 (defun cocaine-time ()

@@ -89,6 +89,62 @@
   :type 'boolean
   :group 'cocaine-line)
 
+;; Performance caching variables
+(defvar cocaine-line--update-timer nil
+  "Timer for debouncing mode-line updates.")
+
+(defvar-local cocaine-line--cached-left nil
+  "Cache for the left section of the mode-line.")
+
+(defvar-local cocaine-line--cached-right nil
+  "Cache for the right section of the mode-line.")
+
+(defvar-local cocaine-line--cached-right-str nil
+  "Cached string for the right section of the mode-line.")
+
+(defvar cocaine-line--last-update 0
+  "Timestamp of last mode-line update.")
+
+(defcustom cocaine-line-min-update-interval 0.1
+  "Minimum interval between mode-line updates in seconds."
+  :type 'number
+  :group 'cocaine-line)
+
+(defvar-local cocaine-line--cached-fill nil
+  "Cached fill for the mode-line.")
+
+(defvar-local cocaine-line--cached-right-width nil
+  "Cached width of the right section of the mode-line.")
+
+(defvar cocaine-line-active-window nil
+  "Stores the currently active window.")
+
+(defcustom cocaine-line-left-separator "  "
+  "Separator used between sections in the mode-line."
+  :type 'string
+  :group 'cocaine-line)
+
+(defcustom cocaine-line-right-separator "  "
+  "Separator used between sections in the mode-line."
+  :type 'string
+  :group 'cocaine-line)
+
+;; Helper functions
+(defun cocaine-line-window-active-p ()
+  "Return non-nil if the current window is active."
+  (let ((current (get-buffer-window))
+        (active cocaine-line-active-window))
+    (eq current active)))
+
+(defun cocaine-line-update-inactive-face ()
+  "Update the cocaine-line-inactive-face with the current theme colors."
+  (let* ((bg-color (face-background 'mode-line-inactive nil t))
+         (fg-color (face-foreground 'mode-line-inactive nil t)))
+    (set-face-attribute 'cocaine-line-inactive-face nil
+                        :background bg-color
+                        :foreground fg-color
+                        :underline nil)))
+
 ;; Preserve original cocaine-line faces and color customizations
 (defface cocaine-line-buffer-name-face
   '((t :foreground "#a0a0ae" :weight bold))
@@ -269,41 +325,9 @@
 (defvar cocaine-line--last-update 0
   "Timestamp of last mode-line update.")
 
-(defcustom cocaine-line-min-update-interval 0.1
-  "Minimum interval between mode-line updates in seconds."
-  :type 'number
-  :group 'cocaine-line)
-
-(defvar cocaine-line-is-active nil)
-
-(defvar-local cocaine-line--cached-fill nil
-  "Cached fill for the mode-line.")
-
-(defvar-local cocaine-line--cached-right-width nil
-  "Cached width of the right section of the mode-line.")
-
-(defvar cocaine-line-active-window nil
-  "Stores the currently active window.")
-
-(defun cocaine-line-window-active-p ()
-  "Return non-nil if the current window is active."
-  (let ((current (get-buffer-window))
-        (active cocaine-line-active-window))
-    (eq current active)))
-
 ;; Preserved separator configurations
 (defcustom cocaine-line-separator " | "
   "Separator used between sections in the modeline."
-  :type 'string
-  :group 'cocaine-line)
-
-(defcustom cocaine-line-left-separator "  "
-  "Separator used between sections in the mode-line."
-  :type 'string
-  :group 'cocaine-line)
-
-(defcustom cocaine-line-right-separator "  "
-  "Separator used between sections in the mode-line."
   :type 'string
   :group 'cocaine-line)
 

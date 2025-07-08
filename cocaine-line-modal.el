@@ -11,7 +11,6 @@
 ;;; Code:
 
 (require 'nerd-icons)
-(require 'cocaine-line-colors)
 
 (defvar cocaine-line-height 1
   "Height of the mode-line.")

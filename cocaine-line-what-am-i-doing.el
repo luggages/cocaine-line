@@ -12,7 +12,6 @@
 
 (require 'cl-lib)  ; Add required dependency
 (require 'nerd-icons)  ; Add required dependency
-(require 'cocaine-line-colors)  ; Add required dependency
 
 (defcustom cocaine-show-what-am-i-doing-info t
   "If set to t, show what-am-i-doing information."
